@@ -6,7 +6,7 @@ def first_primes():
     while numb < 2:
         prime = random.randrange (1,range_of_prime)
         starting = int(2)
-
+new
         while (starting*starting) <= prime:
             score = prime % starting
             if score == int(0):
