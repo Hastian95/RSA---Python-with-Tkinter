@@ -1,0 +1,5 @@
+1. Najpierw wygenerować liczby pierwsze z testu Millera - Rabina:
+https://eduinf.waw.pl/inf/alg/001_search/0019.php
+
+2. Generowanie klucza RSA:
+https://eduinf.waw.pl/inf/utils/010_2010/0219.php

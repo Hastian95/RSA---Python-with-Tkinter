@@ -3,7 +3,6 @@ def first_primes():
     my_prime_numbers = []
     numb = 0
     range_of_prime= 100 # How big numbers you are looking for #
-
     while numb < 2:
         prime = random.randrange (1,range_of_prime)
         starting = int(2)
