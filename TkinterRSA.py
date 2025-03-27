@@ -3,6 +3,7 @@ from tkinter import ttk
 import random
 from tkinter import PhotoImage
 from PIL import Image, ImageTk
+import re
 
 
 def first_primes():
@@ -74,6 +75,23 @@ def Encryption(t,e,n):
     print(text_decrypted)
     return text_decrypted
 
+def Decryption(t,d,n):
+    final=''
+    cleaning=t[1:-1]
+    y=cleaning.split(', ')
+    text_decrypted = []
+    #Asci Part Up
+    for c in y:
+       if 0<int(c)<n:
+           c_int=int(c)
+           text_decrypted.append(chr(((c_int)**d)%n))
+       else:
+          print("Tej wiadomości nie można zaszyfrować.")
+    for joining in text_decrypted:
+        final+=joining
+    print(final)
+    return final
+
 
 # Tworzenie głównego okna
 root = tk.Tk()
@@ -97,12 +115,33 @@ def encode_text():
     text_field_encode_output.insert("1.0", str(encrypted_text))
     text_field_encode_output.config(state="disabled")
 
+def decode_text():
+    t_dirty=text_field_decode_input.get("1.0", "end-1c")
+    pattern = r"\[.*\]"
+    match = re.search(pattern, t_dirty)
+    if match:
+        t=match.group()
+
+    d=int(text_field_decode_e.get("1.0", "end-1c"))
+    n=int(text_field_decode_n.get("1.0", "end-1c"))
+    decrypted_text = Decryption(t,d,n)
+
+    text_field_decode_output.config(state="normal")
+    text_field_decode_output.delete("1.0","end")
+    text_field_decode_output.insert("1.0", str(decrypted_text))
+    text_field_decode_output.config(state="disabled")
+
 def clear_text():
     text_field_encode_input.delete("1.0", "end-1c")
     text_field_encode_output.config(state="normal")
     text_field_encode_output.delete("1.0", "end-1c")
     text_field_encode_output.config(state="disabled")
 
+def clear_text2():
+    text_field_decode_input.delete("1.0", "end-1c")
+    text_field_decode_output.config(state="normal")
+    text_field_decode_output.delete("1.0", "end-1c")
+    text_field_decode_output.config(state="disabled")
 
 def open_popup():
     popup = tk.Toplevel()  # Tworzymy nowe okno
@@ -110,7 +149,7 @@ def open_popup():
     #popup.minsize(200,150)  # Ustawienie rozmiaru okna
 
     # Tworzenie etykiety w oknie pop-up
-    label_popup = ttk.Label(popup, text="Please copy Your keys from generator and paste to appropriate window.\n Than enter Your text to encode or decode and start procedure.", font=("Arial", 11))
+    label_popup = ttk.Label(popup, text="ENCODING\n     If you want to encode the message, first copy 'Public keys'\n     Than enter your text to UPPER field on the right. \n\nDECODING: \n     If you want to decode message, first copy 'Private keys', paste code (e.g [1, 232, 24] and decode!", font=("Arial", 11))
     label_popup.pack(pady=50)  # Umieszczamy etykietę i ustawiamy jej pozycję
 
     # Tworzenie przycisku do zamknięcia okna pop-up
@@ -397,14 +436,14 @@ frame12_inputframe.rowconfigure(0, weight=1)
 label_input = ttk.Label(frame12_inputframe, text="Enter your message:")
 label_input.grid(row=0, column=0, padx=5, pady=5)
 # Pole tekstowe do wprowadzania danych (Text)
-text_field_encode_input = tk.Text(frame12_inputframe,height=4,width=30)  # Można dostosować szerokość i wysokość
-text_field_encode_input.grid(row=1, column=0, padx=5, pady=5,sticky="ew")
+text_field_decode_input = tk.Text(frame12_inputframe,height=4,width=30)  # Można dostosować szerokość i wysokość
+text_field_decode_input.grid(row=1, column=0, padx=5, pady=5,sticky="ew")
 
-label_encode = ttk.Label(frame12_inputframe, text="Your decoded text:")
-label_encode.grid(row=0, column=1, padx=5, pady=5)
+label_decode = ttk.Label(frame12_inputframe, text="Your decoded text:")
+label_decode.grid(row=0, column=1, padx=5, pady=5)
 # Pole tekstowe do wprowadzania danych (Text)
-text_field_encode_output = tk.Text(frame12_inputframe,height=4,state="disabled",width=30)  # Można dostosować szerokość i wysokość
-text_field_encode_output.grid(row=1, column=1, padx=5, pady=5,sticky="ew")
+text_field_decode_output = tk.Text(frame12_inputframe,height=4,state="disabled",width=30)  # Można dostosować szerokość i wysokość
+text_field_decode_output.grid(row=1, column=1, padx=5, pady=5,sticky="ew")
 
 #13  - Input e and d
 frame13_inputframe = ttk.Frame(root)
@@ -418,28 +457,28 @@ frame13_inputframe.columnconfigure(4, weight=1)
 frame13_inputframe.columnconfigure(5, weight=1)
 frame13_inputframe.rowconfigure(0, weight=1)
 
-label_inpute = ttk.Label(frame13_inputframe, text="Enter e")
+label_inpute = ttk.Label(frame13_inputframe, text="Enter d")
 label_inpute.grid(row=0, column=0, sticky="w", padx=5, pady=5)
-text_field_encode_e = tk.Text(frame13_inputframe,height=1,width=5)  # Można dostosować szerokość i wysokość
-text_field_encode_e.grid(row=0, column=1,columnspan=1, padx=5, pady=5)
+text_field_decode_e = tk.Text(frame13_inputframe,height=1,width=5)  # Można dostosować szerokość i wysokość
+text_field_decode_e.grid(row=0, column=1,columnspan=1, padx=5, pady=5)
 
 label_inputn = ttk.Label(frame13_inputframe, text="Enter n")
 label_inputn.grid(row=0, column=2, sticky="w", padx=5, pady=5)
-text_field_encode_n = tk.Text(frame13_inputframe,height=1,width=5)  # Można dostosować szerokość i wysokość
-text_field_encode_n.grid(row=0, column=3,columnspan=1, padx=5, pady=5)
+text_field_decode_n = tk.Text(frame13_inputframe,height=1,width=5)  # Można dostosować szerokość i wysokość
+text_field_decode_n.grid(row=0, column=3,columnspan=1, padx=5, pady=5)
 #13 ENCODE THE THE TEXT
 path_decode = r"C:\Users\Paweł\Desktop\Paweł\IT\RSA\Tkinter_photos\decode.png"
 img = Image.open(path_decode)  # Otwórz obrazek
 img = img.resize((80, 32))  # Zmień rozmiar na np. 50x50 pikseli
 # Konwertuj obrazek do formatu Tkinter
 decode = ImageTk.PhotoImage(img)
-label_frame13_decode = ttk.Button(frame13_inputframe,command=encode_text,image=decode,style="create.TButton")
+label_frame13_decode = ttk.Button(frame13_inputframe,command=decode_text,image=decode,style="create.TButton")
 # Umieszczanie widgetu na siatce
 label_frame13_decode.grid(row=0, column=4, padx=5, pady=0,sticky="e")
 
 #14 Clear button
 
-label_frame13_clear = ttk.Button(frame13_inputframe,command=clear_text,image=clear,text="clear")
+label_frame13_clear = ttk.Button(frame13_inputframe,command=clear_text2,image=clear,text="clear")
 # Umieszczanie widgetu na siatce
 label_frame13_clear.grid(row=0, column=5, padx=5, pady=0,sticky="e")
 
