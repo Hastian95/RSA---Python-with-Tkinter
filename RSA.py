@@ -1,5 +1,5 @@
+import random
 def first_primes():
-    import random
     my_prime_numbers = []
     numb = 0
     range_of_prime= 100 # How big numbers you are looking for #
@@ -23,8 +23,6 @@ def first_primes():
             break
     return my_prime_numbers
 
-
-
 def algorithm_RSA(my_prime_numbers):
     p = my_prime_numbers[0]
     q = my_prime_numbers[1]
@@ -36,22 +34,26 @@ def algorithm_RSA(my_prime_numbers):
     u, w, d, z = 1, e, 0, Theta
 
     while w:
-        if w < z:
-            u, d = d, u
-            w, z = z, w
-        q = w//z
-        u -= q*d
-        w -= q*z
+        if z != 0:
+            if w < z:
+                u, d = d, u
+                w, z = z, w
+            q = w//z
+            u -= q*d
+            w -= q*z
+        else:
+            return algorithm_RSA(first_primes())
     if z == 1:
         if d < 0: d += Theta
+        return (e,n), (d,n)
+
         print(f"PUBLIC KEY: (e={e},n={n})")
         print(f"PRIVATE KEY: (d={d},n={n})")
 
+        return publickeys, privatekeys
+
     else:
-        first_primes()
-        algorithm_RSA(first_primes())
-
-
+        return algorithm_RSA(first_primes())
 def Encryption():
     print("Enter your text to encryption: ")
     t = input() #text_to_encrypt
